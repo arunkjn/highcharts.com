@@ -11280,6 +11280,8 @@ Chart.prototype = {
 		if (!renderTo) {
 			error(13, true);
 		}
+
+		chart.renderTo = renderTo.parentElement;
 		
 		// If the container already holds a chart, destroy it. The check for hasRendered is there
 		// because web pages that are saved to disk from the browser, will preserve the data-highcharts-chart
@@ -11301,9 +11303,9 @@ Chart.prototype = {
 		// state to determine the size, else the legend and tooltips won't render
 		// properly. The allowClone option is used in sparklines as a micro optimization,
 		// saving about 1-2 ms each chart.
-		if (!optionsChart.skipClone && !renderTo.offsetWidth) {
-			chart.cloneRenderTo();
-		}
+		// if (!optionsChart.skipClone && !renderTo.offsetWidth) {
+		// 	chart.cloneRenderTo();
+		// }
 
 		// get the width and height
 		chart.getChartSize();
@@ -11311,23 +11313,24 @@ Chart.prototype = {
 		chartHeight = chart.chartHeight;
 
 		// create the inner container
-		chart.container = container = createElement(DIV, {
-				className: PREFIX + 'container' +
-					(optionsChart.className ? ' ' + optionsChart.className : ''),
-				id: containerId
-			}, extend({
-				position: RELATIVE,
-				overflow: HIDDEN, // needed for context menu (avoid scrollbars) and
-					// content overflow in IE
-				width: chartWidth + PX,
-				height: chartHeight + PX,
-				textAlign: 'left',
-				lineHeight: 'normal', // #427
-				zIndex: 0, // #1072
-				'-webkit-tap-highlight-color': 'rgba(0,0,0,0)'
-			}, optionsChart.style),
-			chart.renderToClone || renderTo
-		);
+		// chart.container = container = createElement(DIV, {
+		// 		className: PREFIX + 'container' +
+		// 			(optionsChart.className ? ' ' + optionsChart.className : ''),
+		// 		id: containerId
+		// 	}, extend({
+		// 		position: RELATIVE,
+		// 		overflow: HIDDEN, // needed for context menu (avoid scrollbars) and
+		// 			// content overflow in IE
+		// 		width: chartWidth + PX,
+		// 		height: chartHeight + PX,
+		// 		textAlign: 'left',
+		// 		lineHeight: 'normal', // #427
+		// 		zIndex: 0, // #1072
+		// 		'-webkit-tap-highlight-color': 'rgba(0,0,0,0)'
+		// 	}, optionsChart.style),
+		// 	chart.renderToClone || renderTo
+		// );
+		chart.container = container = renderTo;
 
 		// cache the cursor (#1650)
 		chart._cursor = container.style.cursor;
